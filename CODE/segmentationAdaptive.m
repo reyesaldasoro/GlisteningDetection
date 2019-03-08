@@ -5,7 +5,7 @@ if ~exist('OtsuT','var')
     OtsuT = 1.4;
 end
 %% Take only red channel, filter to remove background
-dataIn_2        = dataIn(:,:,1);
+dataIn_2        = (dataIn(:,:,1));
 thresLevel      = adaptthresh(dataIn_2, 0.05);
 %Convert image to binary image, specifying the threshold value.
 dataOut         = imbinarize(dataIn_2,thresLevel*OtsuT);

@@ -32,4 +32,4 @@ end
 %clf
 %imagesc([dataIn(:,:,1) dataIn_2])
 
-dataOut = dataIn2;
+dataOut = dataIn_2;
