@@ -10,7 +10,9 @@ colorbar
 
 
 %%
-dataIn_2 = dataIn(70:738,:,1);
+%dataIn_2 = dataIn(70:738,:,1);
+dataIn_2 = dataIn(:,:,1);
+dataIn_2([1:70 738:end],:,1)=0;
 dataIn_3 = imfilter(dataIn_2,gaussF(19,19,1),'replicate');
 %%
 
@@ -19,7 +21,7 @@ dataIn_5 = (dataIn_4/max(dataIn_4(:)));
 %%
 
 se = strel('disk',4);
-dataIn_2 = imtophat(dataIn_1,se);
+dataIn_2 = imtophat(dataIn,se);
 dataIn_3 = rgb2gray(dataIn_2);
 dataIn_4 = double(imfilter(dataIn_3(70:738,:,:),gaussF(3,3,1),'replicate'));
 imagesc(dataIn_4)
