@@ -1,4 +1,4 @@
-function  [dataOut,Jacc,HitRate] = segmentationAdaptive(dataIn,GT,OtsuT)
+function  [dataOut,Jacc,HitRate] = segmentationAdaptive2(dataIn,GT,OtsuT)
 
 
 if ~exist('OtsuT','var')
@@ -10,7 +10,15 @@ thresLevel      = adaptthresh(dataIn_2, 0.05);
 %Convert image to binary image, specifying the threshold value.
 dataOut         = imbinarize(dataIn_2,thresLevel*OtsuT);
 
+%Convert image to binary image, with a lower value than the default
+dataLowT         = imbinarize(dataIn_2,thresLevel*0.9*OtsuT);
+dataLowT_lab       = bwlabel(dataLowT);
+dataLowT_R          = regionprops(dataLowT_lab);
 
+% Remove very large regions and dots
+dataLotT_filt       = ismember(dataLowT_lab,find(([dataLowT_R.Area]<200)&([dataLowT_R.Area]>1)));
+%dataLotT_filt       = ismember(dataLowT_lab,find([dataLowT_R.Area]>1));
+dataOut             = dataLotT_filt;
 
 %% Measure Jaccard Index if GT available
 if exist('GT','var')

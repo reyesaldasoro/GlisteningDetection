@@ -1,5 +1,8 @@
-function  [dataOut,Jacc] = segmentationOtsu(dataIn,GT)
+function  [dataOut,Jacc] = segmentationOtsu(dataIn,GT,OtsuT)
 
+if ~exist('OtsuT','var')
+    OtsuT = 1.4;
+end
 
 %% Take only red channel, filter to remove backgroun
 dataIn_2    = dataIn(:,:,1);
@@ -8,7 +11,7 @@ dataIn_4    = (dataIn_2-dataIn_3);
 
 %%
 thresLevel  = 255 *graythresh(dataIn_4);
-dataOut     = dataIn_4>thresLevel;
+dataOut     = dataIn_4>OtsuT*thresLevel;
 
 
 %% Measure Jaccard Index if GT available

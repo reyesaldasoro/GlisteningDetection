@@ -1,40 +1,84 @@
 
-dataIn_1 = imread('D:\OneDrive - City, University of London\Acad\Research\ChrisHULL\RE__Ophthalmic_IP_problem\S1.tif');
 
+
+
+clear all
+close all
+clc
+baseDir = ('D:\Acad\GitHub\GlisteningDetection\Data\');
 %%
-imagesc(dataIn_1(70:738,:,:))
-colorbar
+dir0        = dir(strcat(baseDir,'*_GT.tif'));
+numFiles    = size(dir0,1);
+for TT=1.2%0.8:0.1:6
+for k=1:numFiles
+    location_GT         = strfind(dir0(k).name,'_GT');
+    currentFileGT       = dir0(k).name;
+    currentFileData     = dir0(k).name([1:location_GT-1 location_GT+3:end] );
+    currentFileGTMat    = strcat(dir0(k).name(1:end-3),'mat');
+    
+    GTData                  = load(strcat(baseDir,currentFileGTMat),'GT');
+    GT                  = GTData.GT;
+    dataIn              = imread(strcat(baseDir,currentFileData));
+    [dataOut,Jacc] = segmentationOtsu(dataIn,GT,TT);
+    OtsuJaccards(k) = Jacc;
+    subplot(2,4,k) 
+    imagesc(dataOut+2*GT)   
+    title(strcat('Jacc =',num2str(Jacc,3)))
+    [dataOut,Jacc,HitRate] = segmentationAdaptive(dataIn,GT,TT);
+    AdaptJaccards(k) = Jacc;
+    AdaptHits(k)    = HitRate;
+    subplot(2,4,k+4) 
+    imagesc(dataOut+2*GT)
+    title(strcat('Jacc =',num2str(Jacc,3)))
+    [dataOut,Jacc,HitRate] = segmentationAdaptive2(dataIn,GT,TT);
+    Adapt2Jaccards(k) = Jacc;
+    Adapt2Hits(k)    = HitRate;
+    
+end
+res(round(10*TT),1) = mean(OtsuJaccards) ;
+res(round(10*TT),2) = mean(AdaptJaccards) ;
+res(round(10*TT),3) = mean(AdaptHits) ;
+res(round(10*TT),4) = mean(Adapt2Jaccards) ;
+res(round(10*TT),5) = mean(Adapt2Hits) ;
+
+end
 %%
-imagesc(dataIn_4) 
-
-colorbar
-
-
-%%
-%dataIn_2 = dataIn(70:738,:,1);
-dataIn_2 = dataIn(:,:,1);
-%dataIn_2([1:70 738:end],:,1)=0;
-dataIn_3 = imfilter(dataIn_2,gaussF(19,19,1),'replicate');
-%%
-
-dataIn_4 = (dataIn_2-dataIn_3);
-dataIn_5 = (dataIn_4/max(dataIn_4(:)));
-%%
-
-se = strel('disk',4);
-dataIn_2 = imtophat(dataIn,se);
-dataIn_3 = rgb2gray(dataIn_2);
-%dataIn_4 = double(imfilter(dataIn_3(70:738,:,:),gaussF(3,3,1),'replicate'));
-dataIn_4 = double(imfilter(dataIn_3,gaussF(3,3,1),'replicate'));
-imagesc(dataIn_4)
-colorbar
-
-
-%%
-
-dataIn_5 = houghpeaks((dataIn_4),55,'Threshold',0.1*max(dataIn_4(:)));
-%%
-hold off
-imagesc(dataIn_4)
-hold on 
-plot(dataIn_5(:,2),dataIn_5(:,1),'s','color','white');
+% dataIn_1 = imread('D:\OneDrive - City, University of London\Acad\Research\ChrisHULL\RE__Ophthalmic_IP_problem\S1.tif');
+% 
+% %%
+% imagesc(dataIn_1(70:738,:,:))
+% colorbar
+% %%
+% imagesc(dataIn_4) 
+% 
+% colorbar
+% 
+% 
+% %%
+% %dataIn_2 = dataIn(70:738,:,1);
+% dataIn_2 = dataIn(:,:,1);
+% %dataIn_2([1:70 738:end],:,1)=0;
+% dataIn_3 = imfilter(dataIn_2,gaussF(19,19,1),'replicate');
+% %%
+% 
+% dataIn_4 = (dataIn_2-dataIn_3);
+% dataIn_5 = (dataIn_4/max(dataIn_4(:)));
+% %%
+% 
+% se = strel('disk',4);
+% dataIn_2 = imtophat(dataIn,se);
+% dataIn_3 = rgb2gray(dataIn_2);
+% %dataIn_4 = double(imfilter(dataIn_3(70:738,:,:),gaussF(3,3,1),'replicate'));
+% dataIn_4 = double(imfilter(dataIn_3,gaussF(3,3,1),'replicate'));
+% imagesc(dataIn_4)
+% colorbar
+% 
+% 
+% %%
+% 
+% dataIn_5 = houghpeaks((dataIn_4),55,'Threshold',0.1*max(dataIn_4(:)));
+% %%
+% hold off
+% imagesc(dataIn_4)
+% hold on 
+% plot(dataIn_5(:,2),dataIn_5(:,1),'s','color','white');
