@@ -10,7 +10,7 @@ dataIn_3    = imfilter(dataIn_2,gaussF(19,19,1),'replicate');
 dataIn_4    = (dataIn_2-dataIn_3);
 
 %%
-thresLevel  = 255 *graythresh(dataIn_4);
+thresLevel  = 255 *graythresh(dataIn_4(dataIn_4>0));
 dataOut     = dataIn_4>OtsuT*thresLevel;
 
 

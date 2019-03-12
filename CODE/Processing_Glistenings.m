@@ -1,23 +1,30 @@
 
-
-
-
 clear all
 close all
 clc
-baseDir = ('D:\Acad\GitHub\GlisteningDetection\Data\');
+
+%% 
+if strcmp(filesep,'/')
+    % Running in Mac
+    baseDir             = '/Users/ccr22/Academic/GitHub/GlisteningDetection/Data/';
+else
+    % running in windows
+    baseDir             = 'D:\Acad\GitHub\GlisteningDetection\Data\';
+end
+% 
+
 %%
 dir0        = dir(strcat(baseDir,'*_GT.tif'));
 numFiles    = size(dir0,1);
 for TT=0.8:0.1:6
     disp(TT)
-for k=1%:numFiles
+for k=1:numFiles
     location_GT         = strfind(dir0(k).name,'_GT');
     currentFileGT       = dir0(k).name;
     currentFileData     = dir0(k).name([1:location_GT-1 location_GT+3:end] );
     currentFileGTMat    = strcat(dir0(k).name(1:end-3),'mat');
     
-    GTData                  = load(strcat(baseDir,currentFileGTMat),'GT');
+    GTData              = load(strcat(baseDir,currentFileGTMat),'GT');
     GT                  = GTData.GT;
     dataIn              = imread(strcat(baseDir,currentFileData));
     
@@ -51,7 +58,8 @@ end
 
 end
 %%
-ttt=[4 ];
+figure
+ttt=[1 ];
 plot(1:60,mean(Jacc1(:,ttt),2),'r',...
     1:60,mean(Jacc2(:,ttt),2),'b',...
     1:60,mean(Jacc3(:,ttt),2),'k',...
