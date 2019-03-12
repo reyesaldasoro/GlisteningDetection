@@ -18,7 +18,7 @@ dir0        = dir(strcat(baseDir,'*_GT.tif'));
 numFiles    = size(dir0,1);
 for TT=0.8:0.1:6
     disp(TT)
-for k=1:numFiles
+for k=2%1:numFiles
     location_GT         = strfind(dir0(k).name,'_GT');
     currentFileGT       = dir0(k).name;
     currentFileData     = dir0(k).name([1:location_GT-1 location_GT+3:end] );
@@ -59,7 +59,7 @@ end
 end
 %%
 figure
-ttt=[1 ];
+ttt=[4 ];
 plot(1:60,mean(Jacc1(:,ttt),2),'r',...
     1:60,mean(Jacc2(:,ttt),2),'b',...
     1:60,mean(Jacc3(:,ttt),2),'k',...
