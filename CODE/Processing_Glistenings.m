@@ -16,9 +16,9 @@ end
 %%
 dir0        = dir(strcat(baseDir,'*_GT.tif'));
 numFiles    = size(dir0,1);
-for TT=0.8:0.1:6
+for TT=1%0.8:0.1:6
     disp(TT)
-for k=2%1:numFiles
+for k=4%1:numFiles
     location_GT         = strfind(dir0(k).name,'_GT');
     currentFileGT       = dir0(k).name;
     currentFileData     = dir0(k).name([1:location_GT-1 location_GT+3:end] );

@@ -1,4 +1,4 @@
-function  [dataOut] = removeIris(dataIn)
+function  [dataOut,dataOut2] = removeIris(dataIn)
 
 
 
@@ -7,6 +7,7 @@ function  [dataOut] = removeIris(dataIn)
 midRows             = floor(rows/2);
 %% Take only red channel, filter to remove background
 dataIn_2        = dataIn(:,:,1);
+dataOut2        = dataIn(:,:,1);
 
 %% First, check the Iris has been removed, this is manifest with higher
 % levels at the edges than the centre.
@@ -22,14 +23,21 @@ if (0.7*(topInt))>topMidInt
     limitTop    =5+ 30+find(dataIn_3(31:midRows)<((topInt+topMidInt)/2),1,'first');
     %disp(strcat('Remove first ',32,num2str(limitTop),' rows'))
     dataIn_2(1:limitTop,:) = 0;
+    dataOut2(1:limitTop,:) = 255;
+    
 end
 if (0.7*(bottomInt))>botMidInt
     % Find edges top and bottom
     limitBot    =-5+ midRows+ find(dataIn_3(midRows:end)>((botMidInt+bottomInt)/2),1,'first');
     %disp(strcat('Remove last ',32,num2str(rows-limitBot),' rows'))
     dataIn_2(limitBot:end,:) = 0;
+    dataOut2(limitBot:end,:) = 255;
+    
 end
 %clf
 %imagesc([dataIn(:,:,1) dataIn_2])
 
 dataOut = dataIn_2;
+
+
+
