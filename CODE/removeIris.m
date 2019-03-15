@@ -1,4 +1,4 @@
-function  [dataOut,dataOut2] = removeIris(dataIn)
+function  [dataOut,dataOut2,dataOut3] = removeIris(dataIn)
 
 
 
@@ -24,6 +24,8 @@ if (0.7*(topInt))>topMidInt
     %disp(strcat('Remove first ',32,num2str(limitTop),' rows'))
     dataIn_2(1:limitTop,:) = 0;
     dataOut2(1:limitTop,:) = 255;
+else 
+    limitTop =0;
     
 end
 if (0.7*(bottomInt))>botMidInt
@@ -32,12 +34,16 @@ if (0.7*(bottomInt))>botMidInt
     %disp(strcat('Remove last ',32,num2str(rows-limitBot),' rows'))
     dataIn_2(limitBot:end,:) = 0;
     dataOut2(limitBot:end,:) = 255;
+else
+    limitBot=rows+1;
     
 end
 %clf
 %imagesc([dataIn(:,:,1) dataIn_2])
 
 dataOut = dataIn_2;
-
+dataOut3 = zeros(rows,cols);
+    dataOut3(1:limitTop,:) = 1;
+    dataOut3(limitBot:end,:) = 1;
 
 

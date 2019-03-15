@@ -1,9 +1,10 @@
 
+clear
 S1 =imread('/Users/ccr22/Academic/GitHub/GlisteningDetection/Data/S1.tif');
 S2 =imread('/Users/ccr22/Academic/GitHub/GlisteningDetection/Data/S2.tif');
 S3 =imread('/Users/ccr22/Academic/GitHub/GlisteningDetection/Data/S3.tif');
 S4 =imread('/Users/ccr22/Academic/GitHub/GlisteningDetection/Data/S4.tif');
-
+%%
 [rows1,cols1,levs]=size(S1);
 [rows2,cols2,levs]=size(S2);
 [rows3,cols3,levs]=size(S3);
