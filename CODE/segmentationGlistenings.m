@@ -81,9 +81,34 @@ posMin_1R            = find(avInt_1R<minInt_1R,1,'first');
 % axis tight
 
 %% Find the actual strip by thresholding the distance transform
-S1_10L      = (S1_9L<posMin_1L);
-S1_10R      = (S1_9R<posMin_1R);
+S1_10L      = (S1_9L<posMin_1L).*(1-regionIris);
+% Regions may overlap, ensure this does not happen by removing the first region
+% calculated
+S1_10R      = (S1_9R<posMin_1R).*(1-S1_10L).*(1-regionIris);
 
+%% Find the intermediate region and the others
+BackgroundRegions   = bwlabel(1-(S1_10L|S1_10R|regionIris));
+
+centralR            = unique(BackgroundRegions.*S1_8B);
+centralR(centralR==0)=[];
+
+
+
+S1_10Cent           = (BackgroundRegions==centralR);
+S1_10Edges          = (BackgroundRegions>0) - S1_10Cent;
+
+%%
+figure
+subplot(151)
+imagesc(dataIn.*repmat(uint8(S1_10Edges),[1 1 3]))
+subplot(152)
+imagesc(dataIn.*repmat(uint8(S1_10L),[1 1 3]))
+subplot(153)
+imagesc(dataIn.*repmat(uint8(S1_10Cent),[1 1 3]))
+subplot(154)
+imagesc(dataIn.*repmat(uint8(S1_10R),[1 1 3]))
+subplot(155)
+imagesc(dataIn)
 %% Display
 figure
 S1B = dataIn;
